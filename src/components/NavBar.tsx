@@ -56,7 +56,7 @@ const NavBar:React.FC = () => {
             </Link>
             <div className="flex gap-4 pl-3 pr-3">
               <Link
-                to="/signup"
+                to="/register"
                 className="text-blue-500 font-bold hover:underline"
               >
                 SignUp

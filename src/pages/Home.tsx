@@ -127,6 +127,7 @@ const Home: React.FC = () => {
               src={cards[current].image}
               alt={cards[current].title}
               className="w-full max-h-80 object-contain rounded-xl"
+              loading="lazy"
             />
           </div>
           {/* Text */}
@@ -170,6 +171,7 @@ const Home: React.FC = () => {
                   src={cat.img}
                   alt={cat.name}
                   className="w-9 h-9 object-contain rounded-full"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-blue-500/60 rounded-full pointer-events-none" />
               </div>
@@ -188,6 +190,7 @@ const Home: React.FC = () => {
                   src={flash}
                   alt={"flash image"}
                   className="w-5 h-5 object-contain rounded-full"
+                  loading="lazy"
                 />
               </div>
               <h3 className="font-bold text-center text-lg ml-2 text-gray-800">
@@ -285,7 +288,7 @@ const Home: React.FC = () => {
               <div
                 id="flash-sale-slider"
                 className="flex overflow-x-auto gap-4 scrollbar-hide scroll-smooth px-1 md:px-8"
-                style={{ scrollSnapType: "x mandatory", maxWidth: '100%' }}
+                style={{ scrollSnapType: "x mandatory", maxWidth: "100%" }}
               >
                 {flashSale.map((prod, idx) => (
                   <div
@@ -300,6 +303,7 @@ const Home: React.FC = () => {
                         src={prod.img}
                         alt={prod.name}
                         className="w-full h-36 object-contain"
+                        loading="lazy"
                       />
                     </div>
                     <div className="w-full flex flex-col items-center px-4 pt-2 pb-4">
@@ -350,7 +354,7 @@ const Home: React.FC = () => {
       {/* Choices */}
       <section className="py-14 px-6 md:px-20">
         <h2 className="text-2xl font-semibold mb-6">Choices For You</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-4 gap-6">
           {flashSale.map((prod, idx) => (
             <div
               key={idx}
@@ -360,6 +364,7 @@ const Home: React.FC = () => {
                 src={prod.img}
                 alt={prod.name}
                 className="w-34 h-34 object-contain rounded mb-2"
+                loading="lazy"
               />
               <h4 className="font-medium text-base text-center text-gray-900">
                 {prod.name}
@@ -382,6 +387,7 @@ const Home: React.FC = () => {
                 src={`/assets/products/product-${item}.png`}
                 alt="Product"
                 className="w-full h-40 object-cover rounded"
+                loading="lazy"
               />
               <h4 className="mt-3 text-gray-800 font-medium">Product Name</h4>
               <p className="text-orange-400">$29.99</p>
