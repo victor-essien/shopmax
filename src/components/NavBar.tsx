@@ -85,7 +85,7 @@ const NavBar: React.FC = () => {
               to="/login"
               className="text-white px-2 py-2 bg-blue-500 border rounded-lg font-bold "
             >
-              signin
+              Signin
             </Link>
           </div>
         </div>

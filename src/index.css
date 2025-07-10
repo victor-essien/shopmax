@@ -22,3 +22,11 @@
 }
 
 
+@media (min-width: 768px) {
+  #flash-sale-slider {
+    scrollbar-width: none; /* Firefox */
+  }
+  #flash-sale-slider::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}

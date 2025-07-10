@@ -1,35 +1,62 @@
 import React, { useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const emailSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Please enter your email.")
+    .email("Please enter a valid email address."),
+});
+const passwordSchema = z.object({
+  password: z.string().min(1, "Please enter your password."),
+});
 
 const Login: React.FC = () => {
   const [step, setStep] = useState<"email" | "password">("email");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState("");
   const navigate = useNavigate();
 
-  // Handler for continue button
-  const handleContinue = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simple email validation
-    if (!email ) {
-      setEmailError("Please enter your email.");
-      return;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError("Please enter a valid email address.");
-      return;
-    }
-    setEmailError("");
+  // Email step form
+  const {
+    register: registerEmail,
+    handleSubmit: handleEmailSubmit,
+    formState: { errors: emailErrors },
+    setValue: setEmailValue,
+  } = useForm<{ email: string }>({
+    resolver: zodResolver(emailSchema),
+    defaultValues: { email: "" },
+  });
+
+  // Password step form
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    formState: { errors: passwordErrors },
+    setValue: setPasswordValue,
+  } = useForm<{ password: string }>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: { password: "" },
+  });
+
+  // On email submit
+  const onEmailSubmit = (data: { email: string }) => {
+    setEmail(data.email);
     setStep("password");
   };
-  console.log(emailError);
-  console.log("email", email);
-  // Handler for back arrow
+
+  // On password submit
+  const onPasswordSubmit = (data: { password: string }) => {
+    // TODO: handle login
+  };
+
   const handleBack = () => {
     if (step === "password") {
       setStep("email");
-      setPassword("");
+      setPasswordValue("password", "");
     } else {
       navigate(-1);
     }
@@ -66,121 +93,119 @@ const Login: React.FC = () => {
         <p className="text-center text-gray-600 text-sm mb-2">
           Type your email to login or create a shopmax account.
         </p>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={step === "email" ? handleContinue : undefined}
-        >
-          {step === "email" && (
-            <>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Email
-                </label>
+        {step === "email" && (
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handleEmailSubmit(onEmailSubmit)}
+          >
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                {...registerEmail("email")}
+                className={`w-full px-4 py-2 border ${
+                  emailErrors.email ? "border-red-400" : "border-gray-200"
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 text-gray-800`}
+                placeholder="Enter your email"
+                autoComplete="email"
+              />
+              {emailErrors.email && (
+                <p className="text-red-500 text-xs mt-1">
+                  {emailErrors.email.message}
+                </p>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg shadow transition mt-2"
+            >
+              Continue
+            </button>
+          </form>
+        )}
+        {step === "password" && (
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={handlePasswordSubmit(onPasswordSubmit)}
+          >
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Password
+              </label>
+              <div className="relative">
                 <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (emailError) setEmailError("");
-                  }}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...registerPassword("password")}
                   className={`w-full px-4 py-2 border ${
-                    emailError ? "border-red-400" : "border-gray-200"
+                    passwordErrors.password ? "border-red-400" : "border-gray-200"
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 text-gray-800`}
-                  placeholder="Enter your email"
-                  autoComplete="email"
-                  required
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
                 />
-                {emailError && (
-                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg shadow transition mt-2"
-              >
-                Continue
-              </button>
-            </>
-          )}
-          {step === "password" && (
-            <>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500"
+                  onClick={() => setShowPassword((v) => !v)}
+                  tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 text-gray-800"
-                    placeholder="Enter your password"
-                    autoComplete="current-password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500"
-                    onClick={() => setShowPassword((v) => !v)}
-                    tabIndex={-1}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showPassword ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.657.403-3.22 1.125-4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.875-4.575A9.956 9.956 0 0122 9c0 5.523-4.477 10-10 10a9.956 9.956 0 01-4.575-1.125"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm2.021-2.021A9.956 9.956 0 0122 9c0 5.523-4.477 10-10 10a9.956 9.956 0 01-4.575-1.125M3.98 3.98l16.04 16.04"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                </div>
+                  {showPassword ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.657.403-3.22 1.125-4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.875-4.575A9.956 9.956 0 0122 9c0 5.523-4.477 10-10 10a9.956 9.956 0 01-4.575-1.125"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm2.021-2.021A9.956 9.956 0 0122 9c0 5.523-4.477 10-10 10a9.956 9.956 0 01-4.575-1.125M3.98 3.98l16.04 16.04"
+                      />
+                    </svg>
+                  )}
+                </button>
               </div>
-              <button
-                type="button"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg shadow transition mt-2"
-                // TODO: Replace with actual login handler
-                onClick={() => {}}
-                disabled={!password}
-              >
-                Login
-              </button>
-            </>
-          )}
-        </form>
+              {passwordErrors.password && (
+                <p className="text-red-500 text-xs mt-1">
+                  {passwordErrors.password.message}
+                </p>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg shadow transition mt-2"
+            >
+              Login
+            </button>
+          </form>
+        )}
         <div className="flex items-center gap-2 my-2">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-gray-400 text-xs">OR</span>

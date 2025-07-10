@@ -14,6 +14,10 @@ import gadgetImg from "../assets/catImg/gadgets.png";
 import fashionImg from "../assets/catImg/fashion.png";
 import beautImg from "../assets/catImg/beauty.png";
 import flash from "../assets/flash.png";
+import { products } from "../data/product";
+import type { Product } from "../types";
+import ProductCard from "../components/ProductCard";
+
 const Home: React.FC = () => {
   const flashSale = [
     { img: Photo1, name: "Wireless Headphones", price: 49.99, left: 12 },
@@ -117,6 +121,7 @@ const Home: React.FC = () => {
     <div className="bg-gray-50 text-gray-800">
       {/* NavBar */}
       <NavBar />
+
       {/* Hero Section */}
       {/* Hero Slider Section */}
       <section className="bg-white py-8 px-2 md:px-20 flex flex-col items-center">
@@ -373,7 +378,88 @@ const Home: React.FC = () => {
           ))}
         </div>
       </section>
+      <section className="py-6 px-2 md:px-20">
+        <div className="bg-orange-400 rounded-t-lg px-4 py-2 flex items-center">
+          <h3 className="text-lg font-semibold text-white">
+            Sponsored products
+          </h3>
+        </div>
+        <div className="bg-white rounded-b-lg p-4 max-w-full md:max-w-5xl mx-auto relative">
+          {/* Desktop navigation buttons */}
+          <button
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 shadow rounded-full p-2 hover:bg-orange-100 transition"
+            style={{ pointerEvents: "auto" }}
+            onClick={() => {
+              const el = document.getElementById("sponsored-slider");
+              if (el) el.scrollBy({ left: -300, behavior: "smooth" });
+            }}
+            aria-label="Scroll left"
+          >
+            <svg
+              className="w-6 h-6 text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <div
+            id="flash-sale-slider"
+            className="flex overflow-x-auto gap-2  scrollbar-hide scroll-smooth px-1 md:px-8"
+            style={{ scrollSnapType: "x mandatory", maxWidth: "100%" }}
+          >
+            {products.slice(0, 20).map((product: Product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <button
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 shadow rounded-full p-2 hover:bg-orange-100 transition"
+            style={{ pointerEvents: "auto" }}
+            onClick={() => {
+              const el = document.getElementById("sponsored-slider");
+              if (el) el.scrollBy({ left: 300, behavior: "smooth" });
+            }}
+            aria-label="Scroll right"
+          >
+            <svg
+              className="w-6 h-6 text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+      </section>
+{/* Limited Stock Deals */}
+  <section className="py-6 px-2 md:px-20">
+        <div className="bg-blue-400 rounded-t-lg px-4 py-2 flex items-center">
+          <h3 className="text-lg font-semibold text-white">
+            Limited Stock Deals
+          </h3>
+        </div>
+        <div className="bg-white rounded-b-lg p-4 max-w-full md:max-w-5xl mx-auto relative">
 
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-1">
+             {products.slice(0, 48).map((product: Product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+        </div>
+  </section>
       {/* Featured Products */}
       <section className="py-14 px-6 md:px-20 bg-white">
         <h2 className="text-2xl font-semibold mb-6">Featured Products</h2>
