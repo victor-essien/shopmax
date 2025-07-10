@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     resolver: zodResolver(emailSchema),
     defaultValues: { email: "" },
   });
-
+  console.log(setEmailValue, email);
   // Password step form
   const {
     register: registerPassword,
@@ -50,6 +50,7 @@ const Login: React.FC = () => {
 
   // On password submit
   const onPasswordSubmit = (data: { password: string }) => {
+    console.log(data)
     // TODO: handle login
   };
 
