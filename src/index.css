@@ -30,3 +30,10 @@
     display: none; /* Chrome, Safari, Opera */
   }
 }
+
+@media (min-width: 545px) and (max-width: 763px) {
+  .grid-check {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+

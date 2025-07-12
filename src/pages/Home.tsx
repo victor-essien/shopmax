@@ -452,7 +452,7 @@ const Home: React.FC = () => {
         </div>
         <div className="bg-white rounded-b-lg p-4 max-w-full md:max-w-5xl mx-auto relative">
 
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-1">
+          <div className="grid grid-cols-2 grid-check  md:grid-cols-4 lg:grid-cols-5 gap-1">
              {products.slice(0, 48).map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}

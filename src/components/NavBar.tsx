@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaShoppingCart, FaBell } from "react-icons/fa";
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+  
+    if (storedCart) {
+      try {
+        const cartArr = JSON.parse(storedCart);
+       
+        setCartCount(Array.isArray(cartArr) ? cartArr.length : 0);
+      } catch {
+        setCartCount(0);
+      }
+    } else {
+      setCartCount(0);
+    }
+  }, []);
+  
   return (
-    <header className="p-3 border-b border-gray-200 bg-white sticky top-0 z-20">
+    <header className=" border-b border-gray-200 bg-white sticky top-0 z-20">
       {/* Desktop Navbar */}
       <nav className="flex items-center justify-between md:justify-end ">
         {/* <div className="md:hidden">
@@ -44,7 +62,7 @@ const NavBar: React.FC = () => {
         <div className="hidden md:flex flex-row gap-4 items-center">
           <Link
             to="/about"
-            className="text-slate-600 font-medium hover:bg-gray-400 flex items-center gap-2 px-2 py-2"
+            className="text-slate-600 text-sm font-medium hover:bg-gray-400 flex items-center gap-2 px-2 py-2"
           >
             <svg
               className="w-5 h-5 text-blue-400"
@@ -63,7 +81,7 @@ const NavBar: React.FC = () => {
           </Link>
           <Link
             to="/support"
-            className="text-slate-600 hover:bg-gray-400 font-medium flex items-center gap-2 px-2 py-2"
+            className="text-slate-600  font-medium flex items-center gap-2 px-2 py-2 text-sm"
           >
             <svg
               className="w-5 h-5 text-blue-400"
@@ -83,9 +101,9 @@ const NavBar: React.FC = () => {
           <div className="flex gap-4 pl-3 pr-3">
             <Link
               to="/login"
-              className="text-white px-2 py-2 bg-blue-500 border rounded-lg font-bold "
+              className="text-white px-1 py-1 bg-blue-500 text-sm border rounded-lg font-medium "
             >
-              Signin
+              SignIn
             </Link>
           </div>
         </div>
@@ -194,9 +212,12 @@ const NavBar: React.FC = () => {
             </button>
             <Link
               to="/cart"
-              className="text-slate-600 font-medium hover:text-blue-500 p-2 rounded-full bg-white border border-gray-200 shadow-sm"
+              className="text-slate-600 font-medium relative hover:text-blue-500 p-2 ml-2 "
             >
               <FaShoppingCart className="w-5 h-5" />
+              <span className="absolute bottom-7 right-0 w-3 h-3 text-center font-bold text-white bg-blue-300 rounded-full text-[9px]">
+                {cartCount}
+              </span>
             </Link>
             <Link
               to="/cart"
@@ -259,11 +280,11 @@ const NavBar: React.FC = () => {
           </div>
         )}
       </div>
-      <div className="pb-2 mt-1 mb-2 hidden sm:block">
+      <div className="   hidden sm:block">
         <div className="flex flex-col sm:flex-row px-2 py-2 gap-2 sm:gap-0 items-stretch">
           <Link
             to="/"
-            className="hidden md:block text-2xl text-center font-bold text-blue-500 mr-0 sm:mr-4 whitespace-nowrap"
+            className="hidden md:block text-xl text-center font-bold text-blue-500 mr-0 sm:mr-4 whitespace-nowrap"
           >
             ShopMax
           </Link>
@@ -298,9 +319,12 @@ const NavBar: React.FC = () => {
             </button>
             <Link
               to="/cart"
-              className="text-slate-600 font-medium hover:text-blue-500 p-2 ml-2 rounded-full bg-white border border-gray-200 shadow-sm"
+              className="text-slate-600 font-medium relative hover:text-blue-500 p-2 ml-2 "
             >
               <FaShoppingCart className="w-5 h-5" />
+              <span className="absolute bottom-7 right-0 w-3 h-3 text-center font-bold text-white bg-blue-300 rounded-full text-[9px]">
+                {cartCount}
+              </span>
             </Link>
             <Link
               to="/cart"
