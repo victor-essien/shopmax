@@ -70,7 +70,7 @@ const Cart: React.FC = () => {
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="font-bold text-gray-800 text-sm mb-1">
-                        ₦ {item.price}
+                        ₦ {item.price.toLocaleString()}
                       </div>
                       <div className="text-xs text-gray-400 line-through mb-1">
                         ₦ 11,077
@@ -100,16 +100,16 @@ const Cart: React.FC = () => {
             </h2>
             <div className="flex justify-between text-sm mb-1 text-gray-700">
               <span>Item's total ({totalItems})</span>
-              <span className="font-bold">₦ {totalPrice}</span>
+              <span className="font-bold">₦ {totalPrice.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm mb-4 text-gray-700">
               <span>Subtotal</span>
-              <span className="font-bold text-sm">₦ {totalPrice}</span>
+              <span className="font-bold text-sm">₦ {totalPrice.toLocaleString()}</span>
             </div>
 
             <div className="flex justify-center mt-2">
-              <button className="w-[70%] py-2 px-2 text-md bg-blue-500 text-white font-bold rounded hover:bg-blue-600 transition">
-                Checkout (₦ {totalPrice})
+              <button className="w-[70%] py-2 px-2 text-md bg-blue-500 text-white font-bold rounded cursor-pointer hover:bg-blue-600 transition">
+                Checkout (₦ {totalPrice.toLocaleString()})
               </button>
             </div>
           </div>

@@ -194,6 +194,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         guestCart.push({ ...item, quantity });
       }
       localStorage.setItem("cart", JSON.stringify(guestCart));
+      window.dispatchEvent(new Event("cartUpdated"));
       toast.success(`Product has been added to your cart`);
       return;
     }

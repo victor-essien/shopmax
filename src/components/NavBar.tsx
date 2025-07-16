@@ -7,19 +7,37 @@ const NavBar: React.FC = () => {
   const [cartCount, setCartCount] = useState(0); //null
  
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-  
-    if (storedCart) {
-      try {
-        const cartArr = JSON.parse(storedCart);
-       
-        setCartCount(Array.isArray(cartArr) ? cartArr.length : 0);
-      } catch {
+    const updateCartCount = () => {
+      const storedCart = localStorage.getItem("cart");
+      if (storedCart) {
+        try {
+          const cartArr = JSON.parse(storedCart);
+          // Sum quantities if cart is array of items with quantity
+          if (Array.isArray(cartArr)) {
+            const total = cartArr.reduce(
+              (sum, item) => sum + (item.quantity || 1),
+              0
+            );
+            setCartCount(total);
+          } else {
+            setCartCount(0);
+          }
+        } catch {
+          setCartCount(0);
+        }
+      } else {
         setCartCount(0);
       }
-    } else {
-      setCartCount(0);
-    }
+    };
+
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+    window.addEventListener("cartUpdated", updateCartCount);
+
+    return () => {
+      window.removeEventListener("storage", updateCartCount);
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
   }, []);
   
   return (

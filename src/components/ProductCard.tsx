@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <div className=" w-full   max-w-xs md:min-w-[160px]  md:max-w-[200px] rounded-lg shadow p-2 relative flex flex-col mx-auto">
-     <Link to={`/products/${product.slug || product.id}`}>
+     <Link to={`/products/${product.slug || product.id}`} className='cursor-pointer'>
       {/* Discount badge */}
       {product.discount ? (
         <span className="absolute top-2 right-2 bg-orange-300 text-white text-xs font-bold px-2 py-1 rounded">
