@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 // import ProductImage from '../components/ProductImage';
 import { BiTrash } from "react-icons/bi";
-import { products } from "../data/product";
+import { products, recentViewedProducts, popularProducts } from "../data/product";
+
 import type { Product } from "../types";
 import ProductCard from "../components/ProductCard";
 interface CartItem {
@@ -116,6 +117,139 @@ const Cart: React.FC = () => {
          
         </div>
 
+          {/* Recently Viewed */}
+        <section className="py-6 ">
+        <div className="bg-white rounded-t-lg px-4 py-2 flex items-center">
+          <h3 className="text-xl font-semibold text-slate-800">
+           Recently Viewed
+          </h3>
+        </div>
+        <div className="bg-white rounded-b-lg p-4 max-w-full md:max-w-5xl mx-auto relative">
+          {/* Desktop navigation buttons */}
+          <button
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 shadow rounded-full p-2 hover:bg-orange-100 transition"
+            style={{ pointerEvents: "auto" }}
+            onClick={() => {
+              const el = document.getElementById("sponsored-slider");
+              if (el) el.scrollBy({ left: -300, behavior: "smooth" });
+            }}
+            aria-label="Scroll left"
+          >
+            <svg
+              className="w-6 h-6 text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <div
+            id="flash-sale-slider"
+            className="flex overflow-x-auto gap-2  scrollbar-hide scroll-smooth px-1 md:px-8"
+            style={{ scrollSnapType: "x mandatory", maxWidth: "100%" }}
+          >
+            {recentViewedProducts.map((product: Product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <button
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 shadow rounded-full p-2 hover:bg-orange-100 transition"
+            style={{ pointerEvents: "auto" }}
+            onClick={() => {
+              const el = document.getElementById("sponsored-slider");
+              if (el) el.scrollBy({ left: 300, behavior: "smooth" });
+            }}
+            aria-label="Scroll right"
+          >
+            <svg
+              className="w-6 h-6 text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+                {/* Recently Viewed */}
+        <section className="py-6 ">
+        <div className="bg-white rounded-t-lg px-4 py-2 flex items-center">
+          <h3 className="text-xl font-semibold text-slate-800">
+           Customers also viewed
+          </h3>
+        </div>
+        <div className="bg-white rounded-b-lg p-4 max-w-full md:max-w-5xl mx-auto relative">
+          {/* Desktop navigation buttons */}
+          <button
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 shadow rounded-full p-2 hover:bg-orange-100 transition"
+            style={{ pointerEvents: "auto" }}
+            onClick={() => {
+              const el = document.getElementById("sponsored-slider");
+              if (el) el.scrollBy({ left: -300, behavior: "smooth" });
+            }}
+            aria-label="Scroll left"
+          >
+            <svg
+              className="w-6 h-6 text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <div
+            id="flash-sale-slider"
+            className="flex overflow-x-auto gap-2  scrollbar-hide scroll-smooth px-1 md:px-8"
+            style={{ scrollSnapType: "x mandatory", maxWidth: "100%" }}
+          >
+            {popularProducts.map((product: Product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <button
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-200 shadow rounded-full p-2 hover:bg-orange-100 transition"
+            style={{ pointerEvents: "auto" }}
+            onClick={() => {
+              const el = document.getElementById("sponsored-slider");
+              if (el) el.scrollBy({ left: 300, behavior: "smooth" });
+            }}
+            aria-label="Scroll right"
+          >
+            <svg
+              className="w-6 h-6 text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+      </section>
          {/* Products Suggesstions */}
           <div className="bg-white rounded-b-lg mt-2 max-w-full md:max-w-5xl mx-auto relative">
             <div className="grid grid-cols-2 grid-check  md:grid-cols-4 lg:grid-cols-5 gap-1">

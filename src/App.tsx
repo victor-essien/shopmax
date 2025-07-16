@@ -33,7 +33,7 @@ function App() {
         <Route  path="/cart" element={<Cart />}/>
         <Route path="/profile" element={<Profile />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/products/:slug" element={<ProductDetails />} />
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
       </Routes>
       </AuthProvider>

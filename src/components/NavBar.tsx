@@ -4,8 +4,8 @@ import { FaSearch, FaShoppingCart, FaBell } from "react-icons/fa";
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-
+  const [cartCount, setCartCount] = useState(0); //null
+ 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
   
