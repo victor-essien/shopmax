@@ -4,8 +4,9 @@ import { FaSearch, FaShoppingCart, FaBell } from "react-icons/fa";
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
-  const [cartCount, setCartCount] = useState(0); //null
+  const [cartCount, setCartCount] = useState(null); //null
  
+  console.log(cartCount)
   useEffect(() => {
     const updateCartCount = () => {
       const storedCart = localStorage.getItem("cart");
@@ -20,13 +21,13 @@ const NavBar: React.FC = () => {
             );
             setCartCount(total);
           } else {
-            setCartCount(0);
+            setCartCount(null);
           }
         } catch {
-          setCartCount(0);
+          setCartCount(null);
         }
       } else {
-        setCartCount(0);
+        setCartCount(null);
       }
     };
 
@@ -233,9 +234,13 @@ const NavBar: React.FC = () => {
               className="text-slate-600 font-medium relative hover:text-blue-500 p-2 ml-2 "
             >
               <FaShoppingCart className="w-5 h-5" />
-              <span className="absolute bottom-7 right-0 w-3 h-3 text-center font-bold text-white bg-blue-300 rounded-full text-[9px]">
-                {cartCount}
-              </span>
+              {cartCount !== null ? (
+                <span className="absolute bottom-7 right-0 w-3 h-3 text-center font-bold text-white bg-blue-300 rounded-full text-[9px]">
+                  {cartCount}
+                </span>
+              ) : (
+                <span/>
+              )}
             </Link>
             <Link
               to="/cart"
@@ -340,9 +345,13 @@ const NavBar: React.FC = () => {
               className="text-slate-600 font-medium relative hover:text-blue-500 p-2 ml-2 "
             >
               <FaShoppingCart className="w-5 h-5" />
-              <span className="absolute bottom-7 right-0 w-3 h-3 text-center font-bold text-white bg-blue-300 rounded-full text-[9px]">
-                {cartCount}
-              </span>
+              {cartCount !== null ? (
+                <span className="absolute bottom-7 right-0 w-3 h-3 text-center font-bold text-white bg-blue-300 rounded-full text-[9px]">
+                  {cartCount}
+                </span>
+              ) : (
+                <span/>
+              )}
             </Link>
             <Link
               to="/cart"

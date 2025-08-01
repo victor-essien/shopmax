@@ -14,6 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
+      slug: product.slug,
       name: product.name,
       price: product.price,
       image: product.image,

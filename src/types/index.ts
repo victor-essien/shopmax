@@ -22,3 +22,12 @@ export interface OrderItem {
     price: number;
     image: string;
 }
+
+export interface CartItem {
+  id: string;
+  slug?: string; // Optional slug for product detail links
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}

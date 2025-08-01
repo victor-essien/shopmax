@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 interface CartItem {
   id: string;
+  slug?: string; // Optional slug for product detail links
   name: string;
   price: number;
   image: string;
@@ -50,6 +51,8 @@ interface AuthContextType {
   updateUser: (userData: Partial<User>) => void;
   addToCart: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
   removeFromCart: (itemId: string) => void;
+  incrementCartItem: (itemId: string) => void;
+  decrementCartItem: (itemId: string) => void;
   clearCart: () => void;
   addToWishList(item: WishList): void;
   removeFromWishList: (itemId: string) => void;
@@ -126,7 +129,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(false);
     }
   };
+const incrementCartItem = (itemId: string) => {
 
+  const stored = localStorage.getItem("cart");
+    let guestCart: CartItem[] = stored ? JSON.parse(stored) : [];
+    guestCart = guestCart.map((item) =>
+      item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    localStorage.setItem("cart", JSON.stringify(guestCart));
+    window.dispatchEvent(new Event("cartUpdated"));
+}
+
+const decrementCartItem = (itemId: string) => {
+ const stored = localStorage.getItem("cart");
+    let guestCart: CartItem[] = stored ? JSON.parse(stored) : [];
+    guestCart = guestCart.map((item) =>
+      item.id === itemId && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    );
+    localStorage.setItem("cart", JSON.stringify(guestCart));
+    window.dispatchEvent(new Event("cartUpdated"));
+}
   // GOOGLE LOGIN
   const googleLogin = async (token: string) => {
     console.log(token);
@@ -218,10 +242,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!user) {
       // Guest cart
       const stored = localStorage.getItem("cart");
+      
       let guestCart: CartItem[] = stored ? JSON.parse(stored) : [];
       guestCart = guestCart.filter((i) => i.id !== itemId);
+      console.log('guestCart', guestCart)
       localStorage.setItem("cart", JSON.stringify(guestCart));
-      toast.info("Removed from cart.");
+        window.dispatchEvent(new Event("cartUpdated"));
+      toast.info("Product removed from cart.");
       return;
     }
     // User cart
@@ -329,6 +356,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         addToCart,
         removeFromCart,
         clearCart,
+        incrementCartItem,
+        decrementCartItem,
         addToWishList,
         removeFromWishList,
         clearWishList,

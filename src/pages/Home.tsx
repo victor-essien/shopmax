@@ -34,7 +34,7 @@ const Home: React.FC = () => {
     { name: "Women", img: beautImg },
     { name: "Electronics", img: aplianceImg },
     { name: "Beauty", img: beautImg },
-    { name: "Electronics", img: aplianceImg },
+    { name: "Electrnics", img: aplianceImg },
     { name: "Accessories", img: gadgetImg },
     { name: "Gadgets", img: gadgetImg },
     { name: "Fashion", img: fashionImg },

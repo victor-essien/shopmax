@@ -43,7 +43,7 @@ const ProductDetails: React.FC = () => {
     }
   }, [slug]);
 
-  if (!product) {
+  if (product === null) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-500 text-xl">
         Product not found.
