@@ -24,7 +24,8 @@ const  seller = {
 const ProductDetails: React.FC = () => {
   const { slug } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-   const { addToCart } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const { addToCart } = useAuth();
   
     const handleAddToCart = () => {
       if (!product) return;
@@ -37,16 +38,33 @@ const ProductDetails: React.FC = () => {
     };
 
   useEffect(() => {
+    setIsLoading(true);
     if (slug) {
       const found = products.find((p) => p.slug === slug);
       setProduct(found || null);
+    } else {
+      setProduct(null);
     }
+    setTimeout(() => setIsLoading(false), 500); // Simulate loading
   }, [slug]);
 
-  if (product === null) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 text-xl">
-        Product not found.
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <svg className="animate-spin h-10 w-10 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+        </svg>
+        <span className="ml-4 text-black text-lg">Loading product...</span>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-gray-500 text-xl">
+        <span className="mb-4">Sorry, this product could not be found.</span>
+        <a href="/products" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Back to Products</a>
       </div>
     );
   }

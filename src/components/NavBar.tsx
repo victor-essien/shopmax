@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaShoppingCart, FaBell } from "react-icons/fa";
+import { products } from "../data/product";
+import type { Product } from "../types";
+
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [cartCount, setCartCount] = useState(null); //null
- 
-  console.log(cartCount)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+
   useEffect(() => {
     const updateCartCount = () => {
       const storedCart = localStorage.getItem("cart");
@@ -40,7 +47,34 @@ const NavBar: React.FC = () => {
       window.removeEventListener("cartUpdated", updateCartCount);
     };
   }, []);
-  
+
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+    const results = products
+      .filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .slice(0, 6);
+    setSearchResults(results);
+    setShowResults(true);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className=" border-b border-gray-200 bg-white sticky top-0 z-20">
       {/* Desktop Navbar */}
@@ -239,7 +273,7 @@ const NavBar: React.FC = () => {
                   {cartCount}
                 </span>
               ) : (
-                <span/>
+                <span />
               )}
             </Link>
             <Link
@@ -281,8 +315,8 @@ const NavBar: React.FC = () => {
         </div>
         {/* Mobile Search Dropdown - should be here for mobile only */}
         {showMobileSearch && (
-          <div className="animate-fade-in mt-2 px-2">
-            <div className="flex flex-row border border-gray-300 rounded-lg overflow-hidden bg-white">
+          <div className="animate-fade-in mt-2 px-2 relative" ref={searchRef}>
+            <div className="flex flex-row border border-gray-300 rounded-lg  bg-white">
               <select className="border-0 rounded-none font-medium text-slate-600 py-2 px-2 bg-white focus:ring-0 focus:outline-none min-w-[110px] text-sm">
                 <option value="">All Categories</option>
                 <option value="item1">Dress</option>
@@ -295,9 +329,45 @@ const NavBar: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Search Products..."
-                  className="w-full pl-9 pr-4 py-2 text-sm border-0 rounded-none bg-white focus:outline-none focus:ring-0 min-w-0"
+                  className="w-full pl-9 pr-4 py-2 text-sm text-black border-0 rounded-none bg-white focus:outline-none focus:ring-0 min-w-0"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={() => setShowResults(searchResults.length > 0)}
                 />
                 <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+               
+                    
+                {showResults && (
+                  <div className="absolute left-0 right-0 top-full bg-white border border-gray-200 shadow-lg z-50 max-h-72 overflow-y-auto rounded-b-lg">
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product.id}
+                        to={`/products/${product.slug || product.id}`}
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 border-b last:border-b-0 border-gray-100"
+                        onClick={() => {
+                          setShowResults(false);
+                          setSearchTerm("");
+                        }}
+                      >
+                        {product.image && (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-8 h-8 object-cover rounded bg-gray-100"
+                          />
+                        )}
+                        <span className="text-sm text-gray-800">
+                          {product.name}
+                        </span>
+                      </Link>
+                    ))}
+                    {searchResults.length === 0 && (
+                      <div className="px-3 py-2 text-gray-400 text-sm">
+                        No products found.
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -313,7 +383,7 @@ const NavBar: React.FC = () => {
           </Link>
 
           {/* Desktop Search Bar */}
-          <div className="hidden [@media(min-width:770px)]:flex flex-row flex-1 border border-gray-300 rounded-lg overflow-hidden bg-white min-w-0">
+          <div className="hidden [@media(min-width:770px)]:flex flex-row flex-1 border border-gray-300 rounded-lg  bg-white min-w-0 relative">
             <select className="border-0 rounded-none font-medium text-slate-600 py-2 px-2 bg-white focus:ring-0 focus:outline-none min-w-[110px] text-sm">
               <option value="">All Categories</option>
               <option value="item1">Dress</option>
@@ -322,13 +392,47 @@ const NavBar: React.FC = () => {
               <option value="item4">Men</option>
               <option value="item5">Women</option>
             </select>
-            <div className="relative flex-1 min-w-0">
+            <div className="relative flex-1 min-w-0" ref={searchRef}>
               <input
                 type="text"
                 placeholder="Search Products..."
                 className="w-full pl-9 pr-4 py-2 text-sm sm:text-base border-0 rounded-none bg-white focus:outline-none focus:ring-0 min-w-0"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setShowResults(searchResults.length > 0)}
               />
               <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+              {showResults && (
+                <div className="absolute left-0 right-0 top-full bg-white border border-gray-200 shadow-lg z-50 max-h-72 overflow-y-auto rounded-b-lg">
+                  {searchResults.map((product) => (
+                    <Link
+                      key={product.id}
+                      to={`/products/${product.slug || product.id}`}
+                      className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 border-b last:border-b-0 border-gray-100"
+                      onClick={() => {
+                        setShowResults(false);
+                        setSearchTerm("");
+                      }}
+                    >
+                      {product.image && (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-8 h-8 object-cover rounded bg-gray-100"
+                        />
+                      )}
+                      <span className="text-sm text-gray-800">
+                        {product.name}
+                      </span>
+                    </Link>
+                  ))}
+                  {searchResults.length === 0 && (
+                    <div className="px-3 py-2 text-gray-400 text-sm">
+                      No products found.
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           {/* Mobile Icons */}
@@ -350,7 +454,7 @@ const NavBar: React.FC = () => {
                   {cartCount}
                 </span>
               ) : (
-                <span/>
+                <span />
               )}
             </Link>
             <Link
