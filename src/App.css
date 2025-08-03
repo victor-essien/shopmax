@@ -1,9 +1,3 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
 
 .logo {
   height: 6em;
@@ -39,4 +33,20 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Seller registration input style */
+.seller-input {
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.375rem; /* rounded */
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  width: 100%;
+  outline: none;
+  font-size: 0.875rem; /* text-sm */
+  background-color: #f9fafb; /* bg-gray-50 */
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.seller-input:focus {
+  border-color: #3b82f6; /* blue-400 */
+  box-shadow: 0 0 0 2px #60a5fa44; /* focus:ring-2 focus:ring-blue-400 */
 }

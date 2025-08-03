@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Products:React.FC = () => {
+const ManageProducts:React.FC = () => {
   return (
     <div>Products</div>
   )
 }
 
-export default Products
+export default ManageProducts

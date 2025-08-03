@@ -2,10 +2,13 @@
 import  Home from './pages/Home'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
-import SellerDashboard from './pages/seller/SellerDashboard'
+import DashboardHome from './pages/seller/Dashboard/Home'
+import SellerRegister from './pages/seller/Register'
 import ProductDetails from './pages/ProductDetails'
 import Products from './pages/Products'
 import Register from './pages/Register'
+import ManageProduct from './pages/seller/Dashboard/ManageProduct'
+// import Ratings from './pages/seller/Dashboard/Ratings'
 import Cart from './pages/Cart'
 import { ToastContainer } from 'react-toastify'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -34,7 +37,10 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetails />} />
-        <Route path="/seller/dashboard" element={<SellerDashboard />} />
+        {/* Seller Routes */}
+        <Route path="/seller/dashboard" element={<DashboardHome />} />
+         <Route path="/seller/dashboard/products" element={<ManageProduct />} />
+        <Route path='/seller-register' element={<SellerRegister />} />
       </Routes>
       </AuthProvider>
     </Router>

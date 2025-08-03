@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { Link } from "react-router-dom";
 const emailSchema = z.object({
   email: z
     .string()
@@ -236,6 +236,9 @@ const Login: React.FC = () => {
           </svg>
           Login with Google
         </button>
+        <Link to = {"/seller-register"}>       <p className="text-blue-600 font-semibold">Sell on shopmax?</p>
+        </Link>
+
       </div>
     </div>
   );
